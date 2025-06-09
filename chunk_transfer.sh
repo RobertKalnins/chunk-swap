@@ -26,7 +26,7 @@ fi
 CHUNK_HASH=$(hash_file "$CHUNK_FULL_PATH")
 log_msg "Generated hash: $CHUNK_HASH"
 
-# Step 4: Create backup directory
+# Step 4: Create and validate local backup
 BACKUP_INDEX=$(get_backup_index)
 BACKUP_PATH="$BACKUP_DIR/$BACKUP_INDEX"
 mkdir -p "$BACKUP_PATH"
@@ -34,27 +34,23 @@ cp "$CHUNK_FULL_PATH" "$BACKUP_PATH/"
 echo "$CHUNK_HASH" > "$BACKUP_PATH/hash.md5"
 log_msg "Backed up chunk to $BACKUP_PATH"
 
-# Step 5: Copy to delivery directory (event server + local)
-cp "$CHUNK_FULL_PATH" "$DELIVERY_DIR/"
-echo "$CHUNK_HASH" > "$DELIVERY_DIR/hash.md5"
-
-scp "$CHUNK_FULL_PATH" "pzserver@bontest2.beanster.fun:$CHUNK_PATH/"
-scp "$DELIVERY_DIR/hash.md5" "pzserver@bontest2.beanster.fun:$DELIVERY_DIR/"
-log_msg "Transferred chunk and hash to event server"
-
-# Step 6: Validate backup hash
 if verify_hash "$BACKUP_PATH/$CHUNK_FILE" "$CHUNK_HASH"; then
     log_msg "Backup hash verified."
 else
     log_msg "ERROR: Backup hash mismatch!"
-    log_msg "Chunk Clear Aborted."
+    log_msg "Chunk transfer aborted."
     exit 1
 fi
 
-# Step 7: Replace with empty chunk
+# Step 5: Copy from backup to delivery and remote
+scp "$BACKUP_PATH/$CHUNK_FILE" "pzserver@bontest2.beanster.fun:$DELIVERY_DIR/"
+scp "$BACKUP_PATH/hash.md5" "pzserver@bontest2.beanster.fun:$DELIVERY_DIR/"
+log_msg "Transferred chunk and hash to event server"
+
+# Step 6: Replace with empty chunk
 cp "$EMPTY_CHUNK" "$CHUNK_FULL_PATH"
 log_msg "Chunk wiped and replaced with empty version."
 
-# Step 8: Final notification
+# Step 7: Final notification
 send_server_msg "Delivery ready. The donation has been cleared and transferred."
 log_msg "Transfer complete. Chunk safely backed up, transferred, and wiped."
