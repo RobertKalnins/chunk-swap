@@ -14,6 +14,11 @@
    Warn if `map_1094_937.bin` (at path above) was not modified after the clear message timestamp.  
    Log the warning and prompt whether to proceed.  
    _Note: safest action is to teleport in and out of the chunk manually to ensure it's unloaded._
+   
+1.5 **Wait for manual confirmation that the area is clear**
+    Send message: "Press Enter once the donation area has been visually confirmed clear..."
+    Wait for input
+
 
 2. **Hash Chunk**  
    Generate MD5 (or SHA-256) hash of the target chunk and store in variable.
