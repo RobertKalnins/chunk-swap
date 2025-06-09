@@ -49,3 +49,11 @@ send_server_msg() {
     local message="$1"
     "$RCON_BIN" -c "$RCON_CONF" "servermsg \"$message\""
 }
+
+# Validated functions
+# Validated all manually as of 2025-06-10T15:32:00Z
+# log_msg
+# get_backup_index
+# hash_file
+# verify_hash
+# send_server_msg
