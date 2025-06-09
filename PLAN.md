@@ -2,12 +2,14 @@
 
 ### Pre-Transfer Actions
 - Send message to clear the donation area. Log the timestamp.
-- Admins teleport players out of the target chunk.
+- Admins go to chunk, teleport players out of the target chunk.
 
 ### Script Steps (Run on Donation Server)
 
 1. **Check Timestamp**  
-   Abort if `map_xxx_xxx.bin` was not modified after the clear message timestamp. Log failure and notify.
+   Warn if `map_xxx_xxx.bin` was not modified after the clear message timestamp.
+   Log the warning and prompt whether to proceed.  
+   _(Note: safest action is to teleport in and out of the chunk manually to ensure it's unloaded.)_
 
 2. **Hash Chunk**  
    Generate MD5 hash of `map_xxx_xxx.bin` and store in variable.
@@ -25,3 +27,17 @@
 
 6. **Notify Delivery**  
    Send message indicating delivery is ready.
+
+   ## Item Receive Process (Chunk-Based)
+
+### Pre-Transfer Actions
+- Validate incoming `map_xxx_xxx.bin` using provided MD5 hash. Log error and notify if invalid.
+- Send message to clear the incoming donation area. Log the timestamp.
+- Admins teleport players out of the target chunk.
+
+### Script Steps (Run on Event Server)
+
+1. **Check Timestamp**  
+   Warn if `map_xxx_xxx.bin` was not modified after the clear message timestamp.
+   Log the warning and prompt whether to proceed.  
+   _(Note: safest action is to teleport in and out of the chunk manually to ensure it's unloaded.)_
