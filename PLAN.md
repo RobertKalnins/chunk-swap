@@ -7,6 +7,7 @@
 ### Pre-Transfer Actions
 - Send message to clear the donation area. Log the timestamp.
 - Admins go to chunk, teleport players out of the target chunk.
+- Once they have - press enter to continue
 
 ### Script Steps (Run on Donation Server)
 
@@ -49,6 +50,7 @@
   Abort, log error, and notify if invalid.
 - Send message to clear the incoming donation area. Log the timestamp.
 - Admins teleport players out of the target chunk.
+- Once they have, press enter to continue
 
 ### Script Steps (Run on Event Server)
 
